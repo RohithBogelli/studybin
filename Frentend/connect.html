@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Connect Us - StudyBin | XPLOTASOFT SERVICES</title>
+  <meta name="description" content="Connect with StudyBin by Bogelli Rohith. Reach out for queries, feedback, or support." />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ===== PAGE LOADER WITH LOGO ANIMATION ===== */
+    .page-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(240, 253, 244, 0.97);
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .page-loader.active { opacity: 1; pointer-events: auto; }
+
+    .loader-logo-wrap {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .loader-logo-img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      animation: logoBounce 3s ease-in-out infinite;
+      filter: drop-shadow(0 10px 30px rgba(16,185,129,0.35));
+    }
+    .loader-file-icon {
+      position: absolute;
+      font-size: 2rem;
+      animation: fileIntoBook 3s ease-in-out infinite;
+      opacity: 0;
+    }
+    .loader-file-icon:nth-child(2) { animation-delay: 0s; }
+    .loader-file-icon:nth-child(3) { animation-delay: 1s; font-size: 1.5rem; }
+    .loader-file-icon:nth-child(4) { animation-delay: 2s; font-size: 1.2rem; }
+
+    @keyframes logoBounce {
+      0%, 100% { transform: scale(1) translateY(0); }
+      25% { transform: scale(1.05) translateY(-8px); }
+      50% { transform: scale(1) translateY(0); }
+      75% { transform: scale(0.98) translateY(4px); }
+    }
+    @keyframes fileIntoBook {
+      0%   { transform: translate(80px, -80px) scale(1) rotate(15deg); opacity: 0; }
+      15%  { opacity: 1; }
+      80%  { transform: translate(0, 20px) scale(0.5) rotate(0deg); opacity: 0.8; }
+      100% { transform: translate(0, 40px) scale(0.1) rotate(0deg); opacity: 0; }
+    }
+
+    .loader-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .loader-dots span {
+      display: inline-block;
+      animation: dotPulse 1.4s ease-in-out infinite;
+    }
+    .loader-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loader-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dotPulse {
+      0%, 80%, 100% { opacity: 0; transform: scale(0.8); }
+      40% { opacity: 1; transform: scale(1); }
+    }
+
+    /* ===== CONNECT PAGE LAYOUT ===== */
+    .connect-hero {
+      position: relative;
+      z-index: 2;
+      padding: 7rem 2rem 4rem;
+      text-align: center;
+    }
+    .connect-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 99px;
+      padding: 0.4rem 1.2rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #059669;
+      letter-spacing: 0.5px;
+      margin-bottom: 1.8rem;
+      animation: fadeSlideDown 0.6s ease both;
+    }
+    .connect-hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -2px;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+      animation: fadeSlideDown 0.7s ease 0.1s both;
+    }
+    .connect-hero p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 550px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+      animation: fadeSlideDown 0.7s ease 0.2s both;
+    }
+
+    /* Contact info cards row */
+    .contact-cards-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      animation: fadeSlideDown 0.7s ease 0.3s both;
+    }
+    .contact-info-card {
+      background: rgba(255,255,255,0.7);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    .contact-info-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(16, 185, 129, 0.4);
+      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.12);
+    }
+    .contact-info-icon {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+    .contact-info-card h4 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.4rem;
+    }
+    .contact-info-card p {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .contact-info-card a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    /* Main form + company section */
+    .connect-main-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+      position: relative;
+      z-index: 2;
+      animation: fadeSlideDown 0.7s ease 0.4s both;
+    }
+
+    /* Big premium form card */
+    .connect-form-card {
+      background: rgba(255,255,255,0.85);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 2.5rem;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+    }
+    .connect-form-card h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+    .connect-form-card > p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .cform-group {
+      margin-bottom: 1.2rem;
+    }
+    .cform-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .cform-group input,
+    .cform-group select,
+    .cform-group textarea {
+      width: 100%;
+      padding: 0.85rem 1.1rem;
+      background: rgba(240, 253, 244, 0.5);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      outline: none;
+      transition: all 0.25s ease;
+    }
+    .cform-group input:focus,
+    .cform-group select:focus,
+    .cform-group textarea:focus {
+      border-color: var(--accent);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+    }
+    .cform-group textarea { resize: vertical; min-height: 130px; }
+
+    .connect-submit-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+      letter-spacing: 0.3px;
+    }
+    .connect-submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(16, 185, 129, 0.4);
+    }
+    .connect-submit-btn:active { transform: translateY(0); }
+
+    /* Company info side card */
+    .company-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .company-about-card {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 28px;
+      padding: 2rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .company-about-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .company-about-card::after {
+      content: '';
+      position: absolute;
+      bottom: -30px; left: -30px;
+      width: 120px; height: 120px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+    .company-logo-wrap {
+      width: 80px;
+      height: 80px;
+      background: white;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      position: relative;
+      z-index: 1;
+    }
+    .company-logo-wrap img {
+      width: 65px;
+      height: 65px;
+      object-fit: contain;
+    }
+    .company-about-card h3 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 0.3rem;
+      position: relative;
+      z-index: 1;
+    }
+    .company-about-card .founder-tag {
+      font-size: 0.78rem;
+      background: rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 3px 10px;
+      display: inline-block;
+      margin-bottom: 0.9rem;
+      position: relative;
+      z-index: 1;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+    }
+    .company-about-card p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      opacity: 0.92;
+      position: relative;
+      z-index: 1;
+    }
+
+    .social-links-card {
+      background: rgba(255,255,255,0.85);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      backdrop-filter: blur(10px);
+    }
+    .social-links-card h4 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+    }
+    .social-link-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s ease;
+      border-radius: 10px;
+    }
+    .social-link-row:last-child { border-bottom: none; }
+    .social-link-row:hover { color: var(--accent); padding-left: 8px; }
+    .social-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .social-link-row span { font-size: 0.9rem; font-weight: 600; }
+
+    .response-time-card {
+      background: rgba(16, 185, 129, 0.05);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 16px;
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .response-time-card span:first-child { font-size: 1.8rem; }
+    .response-time-card strong { display: block; font-size: 0.9rem; color: var(--text); }
+    .response-time-card p { font-size: 0.8rem; color: var(--muted); margin: 0; }
+
+    /* Success state */
+    .success-overlay {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .success-overlay.show { display: flex; }
+    .success-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: successPop 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes successPop {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(25px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .connect-main-grid { grid-template-columns: 1fr; }
+      .contact-cards-row { grid-template-columns: 1fr; }
+      .form-row-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ====== PAGE LOADER with StudyBin Logo Animation ====== -->
+  <div id="pageLoader" class="page-loader">
+    <div class="loader-logo-wrap">
+      <img src="logo.png" alt="StudyBin" class="loader-logo-img" />
+      <span class="loader-file-icon">📄</span>
+      <span class="loader-file-icon">📋</span>
+      <span class="loader-file-icon">📝</span>
+    </div>
+    <div class="loader-text">
+      StudyBin <span class="loader-dots"><span>.</span><span>.</span><span>.</span></span>
+    </div>
+  </div>
+
+  <!-- Background Glowing Orbs -->
+  <div class="bg-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+
+  <!-- ====== NAVIGATION ====== -->
+  <nav class="navbar">
+    <div class="nav-logo" onclick="transitionToPage('index.html')" style="cursor:pointer;">
+      <img src="logo.png" alt="StudyBin" style="height: 36px; border-radius: 4px;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'" />
+      <span style="display:none">📚</span>
+      <span>StudyBin</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-item">Home</a>
+      <a href="index.html#about" class="nav-item">About Us</a>
+      <a href="connect.html" class="nav-item active">Connect Us</a>
+      <button class="btn-admin-toggle" onclick="transitionToPage('admin.html')">Admin Panel →</button>
+    </div>
+  </nav>
+
+  <!-- ====== HERO SECTION ====== -->
+  <section class="connect-hero">
+    <div class="connect-hero-badge">
+      ✉️ &nbsp; XPLOTASOFT SERVICES — We Reply Within 24 Hours
+    </div>
+    <h1>Let's <span class="gradient-text">Connect!</span></h1>
+    <p>Have a question, suggestion, or want to collaborate? Reach out to us — we'd love to hear from students and colleges.</p>
+
+    <!-- Three quick-contact info cards -->
+    <div class="contact-cards-row">
+      <div class="contact-info-card">
+        <span class="contact-info-icon">📧</span>
+        <h4>Email Us</h4>
+        <a href="mailto:xplotasofttechnologys@gmail.com">xplotasofttechnologys@gmail.com</a>
+      </div>
+      <div class="contact-info-card">
+        <span class="contact-info-icon">🏢</span>
+        <h4>Company</h4>
+        <p>XPLOTASOFT SERVICES</p>
+      </div>
+      <div class="contact-info-card">
+        <span class="contact-info-icon">🕐</span>
+        <h4>Response Time</h4>
+        <p>Within 24 Hours</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== MAIN CONTENT GRID ====== -->
+  <div class="connect-main-grid">
+
+    <!-- ===== CONTACT FORM ===== -->
+    <div class="connect-form-card">
+      <h2>Send Us a Message</h2>
+      <p>Fill in the details below and we'll get back to you as soon as possible.</p>
+
+      <!-- FORM -->
+      <form id="connectForm" onsubmit="handleConnectSubmit(event)">
+        <div class="form-row-2">
+          <div class="cform-group">
+            <label>First Name</label>
+            <input type="text" id="connectFirst" placeholder="Rohith" required />
+          </div>
+          <div class="cform-group">
+            <label>Last Name</label>
+            <input type="text" id="connectLast" placeholder="Bogelli" required />
+          </div>
+        </div>
+
+        <div class="cform-group">
+          <label>Email Address</label>
+          <input type="email" id="connectEmail" placeholder="you@college.edu" required />
+        </div>
+
+        <div class="cform-group">
+          <label>Phone Number (Optional)</label>
+          <input type="tel" id="connectPhone" placeholder="+91 9876543210" />
+        </div>
+
+        <div class="cform-group">
+          <label>Query Type</label>
+          <select id="connectType">
+            <option value="general">📌 General Inquiry</option>
+            <option value="bug">🐛 Report a Bug</option>
+            <option value="feature">💡 Feature Suggestion</option>
+            <option value="college">🏫 College Partnership</option>
+            <option value="content">📚 Content Issue</option>
+            <option value="other">🔧 Other</option>
+          </select>
+        </div>
+
+        <div class="cform-group">
+          <label>Your Message</label>
+          <textarea id="connectMessage" placeholder="Tell us how we can help you..." required></textarea>
+        </div>
+
+        <div id="connectMsg" style="display:none; margin-bottom: 1rem; padding: 0.8rem 1rem; border-radius: 10px; font-size:0.9rem; font-weight: 600;"></div>
+
+        <button type="submit" class="connect-submit-btn" id="connectSubmitBtn">
+          <span>🚀</span> Send Message
+        </button>
+      </form>
+
+      <!-- SUCCESS STATE -->
+      <div class="success-overlay" id="successOverlay">
+        <div class="success-icon">🎉</div>
+        <h3 style="font-size:1.4rem; font-weight:800; margin-bottom:0.5rem; color:var(--text)">Message Sent!</h3>
+        <p style="color:var(--muted); margin-bottom:1.5rem; line-height:1.6;">Thank you for reaching out! Our team at <strong>XPLOTASOFT SERVICES</strong> will get back to you within 24 hours.</p>
+        <button onclick="resetConnectForm()" style="background: linear-gradient(135deg,#10b981,#059669); color:white; border:none; border-radius:12px; padding:0.8rem 1.8rem; font-family:'Outfit',sans-serif; font-size:0.95rem; font-weight:700; cursor:pointer;">
+          Send Another Message
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== COMPANY SIDEBAR ===== -->
+    <div class="company-card">
+
+      <!-- About the Founder -->
+      <div class="company-about-card">
+        <div class="company-logo-wrap">
+          <img src="logo.png" alt="StudyBin" onerror="this.parentElement.innerHTML='📚'" />
+        </div>
+        <h3>Bogelli Rohith</h3>
+        <span class="founder-tag">FOUNDER &amp; CREATOR</span>
+        <p>Building StudyBin to make study materials accessible to every student in India. XPLOTASOFT SERVICES is committed to empowering education through technology.</p>
+      </div>
+
+      <!-- Social Links -->
+      <div class="social-links-card">
+        <h4>Find Us Online</h4>
+        <a href="#" class="social-link-row">
+          <span class="social-icon" style="background: rgba(29,161,242,0.12);">🐦</span>
+          <span>Twitter / X</span>
+        </a>
+        <a href="#" class="social-link-row">
+          <span class="social-icon" style="background: rgba(10,102,194,0.12);">💼</span>
+          <span>LinkedIn</span>
+        </a>
+        <a href="#" class="social-link-row">
+          <span class="social-icon" style="background: rgba(36,41,47,0.12);">💻</span>
+          <span>GitHub</span>
+        </a>
+        <a href="#" class="social-link-row">
+          <span class="social-icon" style="background: rgba(255,0,0,0.1);">▶️</span>
+          <span>YouTube</span>
+        </a>
+      </div>
+
+      <!-- Response time -->
+      <div class="response-time-card">
+        <span>⚡</span>
+        <div>
+          <strong>Fast Response Guaranteed</strong>
+          <p>We typically respond within 24 hours on working days.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====== PREMIUM FOOTER ====== -->
+  <footer style="margin-top:4rem; border-top:1px solid var(--border); background:rgba(240,253,244,0.85); backdrop-filter:blur(12px);">
+    <div style="max-width:1100px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:2.5rem; padding:2.5rem 2rem 2rem;">
+
+      <!-- Brand -->
+      <div>
+        <div style="display:flex; align-items:center; gap:0.6rem; font-size:1.2rem; font-weight:800; color:var(--text); margin-bottom:0.8rem;">
+          <img src="logo.png" alt="StudyBin" style="height:28px; mix-blend-mode:multiply;" onerror="this.style.display='none'" />
+          🎓 Study<span style="background:linear-gradient(135deg,#a78bfa,var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Bin</span>
+        </div>
+        <p style="font-size:0.83rem; color:var(--muted); line-height:1.65; max-width:240px; margin-bottom:1rem;">
+          Making study materials accessible for every student in India. Built with ❤️ by XPLOTASOFT SERVICES.
+        </p>
+        <div style="display:flex; gap:0.6rem;">
+          <a href="mailto:xplotasofttechnologys@gmail.com" style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;text-decoration:none;border:1px solid var(--border);background:rgba(240,253,244,0.5);transition:all 0.2s ease;" title="Email">📧</a>
+          <a href="#" style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;text-decoration:none;border:1px solid var(--border);background:rgba(240,253,244,0.5);transition:all 0.2s ease;" title="LinkedIn">💼</a>
+          <a href="#" style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;text-decoration:none;border:1px solid var(--border);background:rgba(240,253,244,0.5);transition:all 0.2s ease;" title="GitHub">💻</a>
+          <a href="#" style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;text-decoration:none;border:1px solid var(--border);background:rgba(240,253,244,0.5);transition:all 0.2s ease;" title="Twitter">🐦</a>
+        </div>
+      </div>
+
+      <!-- Platform -->
+      <div>
+        <h5 style="font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:1rem;">Platform</h5>
+        <a href="index.html" style="display:block;font-size:0.87rem;font-weight:500;color:#334155;text-decoration:none;margin-bottom:0.6rem;transition:all 0.2s ease;">🏠 Home Page</a>
+        <a href="index.html#about" style="display:block;font-size:0.87rem;font-weight:500;color:#334155;text-decoration:none;margin-bottom:0.6rem;">📖 About Us</a>
+        <a href="connect.html" style="display:block;font-size:0.87rem;font-weight:700;color:var(--accent);text-decoration:none;margin-bottom:0.6rem;">✉️ Connect Us</a>
+        <a onclick="transitionToPage('admin.html')" style="display:block;font-size:0.87rem;font-weight:500;color:#334155;text-decoration:none;margin-bottom:0.6rem;cursor:pointer;">🔐 Admin Panel</a>
+      </div>
+
+      <!-- Legal -->
+      <div>
+        <h5 style="font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:1rem;">Legal</h5>
+        <a href="#" style="display:block;font-size:0.87rem;font-weight:500;color:#334155;text-decoration:none;margin-bottom:0.6rem;">📄 Privacy Policy</a>
+        <a href="#" style="display:block;font-size:0.87rem;font-weight:500;color:#334155;text-decoration:none;margin-bottom:0.6rem;">📋 Terms of Service</a>
+        <a href="#" style="display:block;font-size:0.87rem;font-weight:500;color:#334155;text-decoration:none;margin-bottom:0.6rem;">🍪 Cookie Policy</a>
+        <a href="#" style="display:block;font-size:0.87rem;font-weight:500;color:#334155;text-decoration:none;margin-bottom:0.6rem;">🏢 Careers</a>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h5 style="font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:1rem;">Contact</h5>
+        <a href="mailto:xplotasofttechnologys@gmail.com" style="display:block;font-size:0.87rem;font-weight:500;color:#334155;text-decoration:none;margin-bottom:0.6rem;">📧 xplotasofttechnologys@gmail.com</a>
+        <a href="#" style="display:block;font-size:0.87rem;font-weight:500;color:#334155;text-decoration:none;margin-bottom:0.6rem;">🐛 Report a Bug</a>
+        <a href="#" style="display:block;font-size:0.87rem;font-weight:500;color:#334155;text-decoration:none;margin-bottom:0.6rem;">💡 Feature Request</a>
+        <div style="margin-top:1rem; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:10px; padding:0.8rem 1rem; font-size:0.78rem; color:#059669; font-weight:600;">
+          ⚡ Replies within 24 hours
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom bar -->
+    <div style="border-top:1px solid var(--border); padding:1rem 2rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.8rem; max-width:1100px; margin:0 auto;">
+      <p style="font-size:0.8rem; color:var(--muted);">© 2026 <strong>StudyBin</strong> by <strong>XPLOTASOFT SERVICES</strong> · Founder: Bogelli Rohith · All rights reserved.</p>
+      <div style="display:flex; gap:1.5rem;">
+        <a href="#" style="font-size:0.8rem;color:var(--muted);text-decoration:none;">Privacy Policy</a>
+        <a href="#" style="font-size:0.8rem;color:var(--muted);text-decoration:none;">Terms of Service</a>
+        <a href="connect.html" style="font-size:0.8rem;color:var(--accent);text-decoration:none;font-weight:600;">Contact Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Page transition function
+    function transitionToPage(url) {
+      const loader = document.getElementById('pageLoader');
+      if (loader) {
+        loader.classList.add('active');
+        setTimeout(() => { window.location.href = url; }, 3000);
+      } else {
+        window.location.href = url;
+      }
+    }
+
+    // Handle form submission
+    function handleConnectSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('connectSubmitBtn');
+      btn.innerHTML = '<span>⏳</span> Sending...';
+      btn.style.opacity = '0.7';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        // Hide form, show success
+        document.getElementById('connectForm').style.display = 'none';
+        document.getElementById('successOverlay').classList.add('show');
+      }, 1500);
+    }
+
+    function resetConnectForm() {
+      document.getElementById('connectForm').reset();
+      document.getElementById('connectForm').style.display = 'block';
+      document.getElementById('successOverlay').classList.remove('show');
+      const btn = document.getElementById('connectSubmitBtn');
+      btn.innerHTML = '<span>🚀</span> Send Message';
+      btn.style.opacity = '1';
+      btn.disabled = false;
+    }
+  </script>
+
+</body>
+</html>

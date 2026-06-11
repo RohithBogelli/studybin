@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StudyBin Owner Hub – Analytics, Traffic & Ad Campaigns</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <!-- Load Chart.js for beautiful graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .admin-page-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    .admin-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+    }
+    .admin-logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .admin-logo span {
+      color: var(--primary);
+    }
+    .admin-user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .admin-badge {
+      background: rgba(34, 211, 238, 0.15);
+      border: 1px solid rgba(34, 211, 238, 0.4);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .access-denied-box {
+      text-align: center;
+      padding: 5rem 2rem;
+      max-width: 480px;
+      margin: 10% auto;
+      background: var(--card);
+      border: 1px solid var(--error);
+      border-radius: 20px;
+    }
+    /* Chart grids styling */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .chart-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    /* Ad campaign manager styles */
+    .ad-manager-split {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 2rem;
+    }
+    .ad-form-card {
+      background: var(--card);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 18px;
+      padding: 1.8rem;
+      height: fit-content;
+    }
+    .ad-list-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.8rem;
+    }
+    .ad-card-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ad-card-details h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+    .ad-card-details p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .ad-placement-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      background: rgba(34, 211, 238, 0.1);
+      border: 1px solid rgba(34,211,238,0.3);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .ad-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .btn-toggle-ad {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: var(--success);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-toggle-ad.inactive {
+      background: rgba(248, 113, 113, 0.15);
+      border: 1px solid rgba(248, 113, 113, 0.4);
+      color: var(--error);
+    }
+    @media (max-width: 992px) {
+      .charts-grid, .ad-manager-split {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BACKGROUND NEON ORBS -->
+  <div class="bg-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+
+  <!-- ACCESS DENIED CONTAINER -->
+  <div class="access-denied-box" id="accessDenied" style="display:none">
+    <span style="font-size: 4rem; display:block; margin-bottom: 1rem;">🔒</span>
+    <h2 style="color: var(--error); margin-bottom: 0.8rem;">Access Denied</h2>
+    <p style="color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6;">This section is restricted to StudyBin Platform Owners. Please login using your Owner/Admin credentials.</p>
+    <button class="btn-primary" onclick="redirectToLogin()" style="width:auto; margin:0 auto">Return to Website</button>
+  </div>
+
+  <!-- MAIN ADMIN HUB CONTENT -->
+  <div class="admin-page-container" id="adminContent" style="display:none">
+    
+    <!-- ADMIN HEADER NAV -->
+    <header class="admin-nav">
+      <div class="admin-logo">🎓 <span>Study</span>Bin Owner Console</div>
+      <div class="admin-user-info">
+        <span class="admin-badge">Owner Mode</span>
+        <span id="adminNameDisplay" style="font-weight:600">Owner</span>
+        <button class="btn-logout" onclick="adminLogout()" style="display:inline-block">Logout</button>
+      </div>
+    </header>
+
+    <!-- STATISTICS SUMMARY -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-title">Platform Students</div>
+        <div class="stat-value" id="adminStatStudents">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Total Notes Uploaded</div>
+        <div class="stat-value" id="adminStatNotes">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Connected Colleges</div>
+        <div class="stat-value" id="adminStatColleges">0</div>
+      </div>
+    </section>
+
+    <!-- SECTION SUBTABS -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" id="btnAdminTabOverview" onclick="switchAdminHubTab('overview')">📊 Traffic & Charts</button>
+      <button class="admin-tab" id="btnAdminTabAds" onclick="switchAdminHubTab('ads')">🚀 Sponsor Campaigns</button>
+      <button class="admin-tab" id="btnAdminTabStudents" onclick="switchAdminHubTab('students')">👤 Students</button>
+      <button class="admin-tab" id="btnAdminTabNotes" onclick="switchAdminHubTab('notes')">📄 Materials</button>
+      <button class="admin-tab" id="btnAdminTabColleges" onclick="switchAdminHubTab('colleges')">🏫 College Directory</button>
+    </div>
+
+    <!-- TAB 1: OVERVIEW TRAFFIC GRAPHS -->
+    <div class="admin-tab-content" id="adminPanelOverview">
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title">📈 Platform Traffic & Daily Logins (Last 7 Days)</div>
+          <canvas id="trafficChart" height="200"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">📚 Study Material Uploads by Subject</div>
+          <canvas id="subjectChart" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: AD CAMPAIGNS PLACEMENTS MANAGER -->
+    <div class="admin-tab-content" id="adminPanelAds" style="display:none">
+      <div class="ad-manager-split">
+        <!-- Add/Edit Ad campaign form -->
+        <div class="ad-form-card">
+          <h3 style="margin-bottom: 1.2rem; font-size:1.1rem" id="adFormTitle">📢 Set Ad Placement</h3>
+          <form id="adCampaignForm" onsubmit="handleSaveAd(event)">
+            <input type="hidden" id="adId" />
+            
+            <div class="form-group">
+              <label>Ad Placement Zone</label>
+              <select id="adPlacement" style="width:100%; padding:0.8rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:12px; color:white; outline:none;" required>
+                <option value="home_banner" style="background:var(--card)">Home Page Hero Banner</option>
+                <option value="login_sidebar" style="background:var(--card)">Login Page Left Banner</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label>Sponsor / Brand Name</label>
+              <div class="input-wrap">
+                <span class="input-icon">👤</span>
+                <input type="text" id="adSponsorName" placeholder="DevPrep" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Campaign Title</label>
+              <div class="input-wrap">
+                <span class="input-icon">📌</span>
+                <input type="text" id="adTitle" placeholder="Land Your Dream Job!" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Ad Text Description</label>
+              <textarea id="adDescription" placeholder="Description details..." rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Target CTA Link URL</label>
+              <div class="input-wrap">
+                <span class="input-icon">🔗</span>
+                <input type="url" id="adLink" placeholder="https://github.com/DevPrep" />
+              </div>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:1.2rem">
+              <button type="submit" class="btn-primary" style="width:auto; padding:0.8rem 1.5rem">Save Campaign</button>
+              <button type="button" class="btn-ghost" onclick="resetAdForm()">Clear</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Campaign listings -->
+        <div class="ad-list-card">
+          <h3 style="margin-bottom: 1.2rem; font-size:1.1rem">📋 Active Sponsor Campaigns</h3>
+          <div id="adCampaignList">
+            <div style="text-align:center; padding:2rem; color:var(--muted)">No campaigns running. Create one on the left!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: MANAGE STUDENTS -->
+    <div class="admin-tab-content" id="adminPanelStudents" style="display:none">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>College Name</th>
+              <th>Registration Date</th>
+              <th>Account Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="studentsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 4: MODERATE NOTES -->
+    <div class="admin-tab-content" id="adminPanelNotes" style="display:none">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Document Title</th>
+              <th>Subject</th>
+              <th>College</th>
+              <th>Uploaded By</th>
+              <th>Upload Date</th>
+              <th>File URL</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="notesTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 5: COLLEGES LIST -->
+    <div class="admin-tab-content" id="adminPanelColleges" style="display:none">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>College Name</th>
+              <th>Required Join Pincode</th>
+              <th>Created Date</th>
+            </tr>
+          </thead>
+          <tbody id="collegesTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
